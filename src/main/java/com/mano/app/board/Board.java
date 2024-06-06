@@ -1,7 +1,5 @@
 package com.mano.app.board;
 
-import java.util.Random;
-
 import com.mano.app.utils.Array;
 
 /**
@@ -10,18 +8,22 @@ import com.mano.app.utils.Array;
 
 public class Board {
     public Integer[][] board;
+    Integer[] possibleMoves;
     private Integer nRows = 9;
     private Integer nCols = 9;
+    int lengthMat = (int) Math.sqrt(nRows);
+
     private Array arrayUtil = new Array();
-    Integer[] possibleMoves = arrayUtil.restart();
 
     public Board() {
         System.out.println("Board");
         board = new Integer[9][9];
+        possibleMoves = arrayUtil.restart(nRows);
         cleanBoard();
         // generateBoard();
         solve(0, 0);
-        printBoard();
+        checkMat(5, 6);
+
     }
 
     private void cleanBoard() {
@@ -33,15 +35,31 @@ public class Board {
     }
 
     public void printBoard() {
-        System.out.println("#############");
         for (int row = 0; row < nRows; row++) {
+            if (row % lengthMat == 0) {
+                for (int i = 0; i < nRows + lengthMat + 1; i++) {
+                    System.out.print("-");
+                    System.out.print(" ");
+                }
+                System.out.println("");
+            }
             for (int col = 0; col < nCols; col++) {
+                if (col % lengthMat == 0) {
+                    System.out.print("|");
+                    System.out.print(" ");
+                }
                 System.out.print(board[row][col]);
                 System.out.print(" ");
             }
+            System.out.print("|");
+            System.out.print(" ");
             System.out.println("");
         }
-        System.out.println("#############");
+        for (int i = 0; i < nRows + lengthMat + 1; i++) {
+            System.out.print("-");
+            System.out.print(" ");
+        }
+        System.out.println("");
     }
 
     private boolean solve(int roW, int coL) {
@@ -70,6 +88,7 @@ public class Board {
         int res = 0;
         res += checkRow(roW, coL);
         res += checkCol(roW, coL);
+        res += checkMat(roW, coL);
         return res;
     }
 
@@ -102,7 +121,20 @@ public class Board {
     }
 
     private int checkMat(Integer roW, Integer coL) {
-        return 0;
+        // NOTE: Find to what matrix the point belongs.
+        int res = 0;
+        int deltaBoundRow = roW / lengthMat, deltaBoundCol = coL / lengthMat;
+        int minBoundRow = lengthMat * deltaBoundRow, maxBoundRow = lengthMat * deltaBoundRow + lengthMat;
+        int minBoundCol = lengthMat * deltaBoundCol, maxBoundCol = lengthMat * deltaBoundCol + lengthMat;
+
+        for (int row = minBoundRow; row < maxBoundRow; row++) {
+            for (int col = minBoundCol; col < maxBoundCol; col++) {
+                if (board[roW][coL] == board[row][col] && (row != roW && col != coL)) {
+                    res = 1;
+                }
+            }
+        }
+        return res;
     }
 
     private int checkDiagonal(Integer roW, Integer coL) {

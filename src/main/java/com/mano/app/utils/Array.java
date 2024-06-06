@@ -17,8 +17,12 @@ public class Array {
         }
     }
 
-    public Integer[] restart() {
-        Integer[] res = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    public Integer[] restart(int length) {
+        // Integer[] res = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        Integer[] res = new Integer[length];
+        for (int i = 0; i < length; i++) {
+            res[i] = i + 1;
+        }
         return res;
     }
 
