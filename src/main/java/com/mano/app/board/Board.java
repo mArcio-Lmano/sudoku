@@ -1,5 +1,7 @@
 package com.mano.app.board;
 
+import java.util.Random;
+
 import com.mano.app.utils.Array;
 
 /**
@@ -12,6 +14,7 @@ public class Board {
     private Integer nRows = 9;
     private Integer nCols = 9;
     int lengthMat = (int) Math.sqrt(nRows);
+    int numbOfNumbers = nRows * nCols;
 
     private Array arrayUtil = new Array();
 
@@ -22,8 +25,7 @@ public class Board {
         cleanBoard();
         // generateBoard();
         solve(0, 0);
-        checkMat(5, 6);
-
+        removeElements(0.70);
     }
 
     private void cleanBoard() {
@@ -48,7 +50,12 @@ public class Board {
                     System.out.print("|");
                     System.out.print(" ");
                 }
-                System.out.print(board[row][col]);
+                if (board[row][col] == 0) {
+                    System.out.print("□");
+                } else {
+                    System.out.print(board[row][col]);
+                }
+                // System.out.print(board[row][col]);
                 System.out.print(" ");
             }
             System.out.print("|");
@@ -135,6 +142,31 @@ public class Board {
             }
         }
         return res;
+    }
+
+    private void removeElements(double percentageToRemove) {
+        Integer[] boardSize = arrayUtil.createIndexArray(nRows * nCols); // NOTE: THIS WILL BRING A BUG THX TO THE 81
+        int NumberOfElementsToRemove = (int) (boardSize.length * percentageToRemove);
+        while (boardSize.length > (nRows * nCols) - NumberOfElementsToRemove) {
+            System.out.println("#####################################");
+            arrayUtil.print(boardSize);
+            System.out.println("BoardSize: " + boardSize.length);
+            int indexToRemove = getRandomIndex(boardSize.length);
+            System.out.println("Index To Remove: " + indexToRemove);
+            System.out.println("Index to removed: " + boardSize[indexToRemove]);
+            int indexRow = boardSize[indexToRemove] / nRows;
+            System.out.println("Row Index to remove:" + indexRow);
+            int indexCol = boardSize[indexToRemove] % nCols;
+            System.out.println("Col Index to remove:" + indexCol);
+            board[indexRow][indexCol] = 0;
+            boardSize = arrayUtil.remove(boardSize, indexToRemove);
+        }
+    }
+
+    private int getRandomIndex(int boardSize) {
+        Random rand = new Random();
+        int index = rand.nextInt(boardSize);
+        return index;
     }
 
     private int checkDiagonal(Integer roW, Integer coL) {
