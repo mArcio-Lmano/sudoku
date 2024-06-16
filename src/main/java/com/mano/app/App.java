@@ -1,6 +1,7 @@
 package com.mano.app;
 
 import com.mano.app.board.Board;
+import com.mano.app.ui.GameUI;
 
 /**
  * Hello world!
@@ -8,8 +9,9 @@ import com.mano.app.board.Board;
  */
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello World!");
-        Board board = new Board();
-        board.printBoard();
+        // System.out.println("Hello World!");
+        // Board board = new Board();
+        // board.printBoard();
+        GameUI ui = new GameUI();
     }
 }

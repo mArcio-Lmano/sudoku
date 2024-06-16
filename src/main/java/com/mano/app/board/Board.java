@@ -23,9 +23,9 @@ public class Board {
         board = new Integer[9][9];
         possibleMoves = arrayUtil.restart(nRows);
         cleanBoard();
-        // generateBoard();
         solve(0, 0);
         removeElements(0.70);
+        printBoard();
     }
 
     private void cleanBoard() {
@@ -55,7 +55,6 @@ public class Board {
                 } else {
                     System.out.print(board[row][col]);
                 }
-                // System.out.print(board[row][col]);
                 System.out.print(" ");
             }
             System.out.print("|");
@@ -148,16 +147,9 @@ public class Board {
         Integer[] boardSize = arrayUtil.createIndexArray(nRows * nCols); // NOTE: THIS WILL BRING A BUG THX TO THE 81
         int NumberOfElementsToRemove = (int) (boardSize.length * percentageToRemove);
         while (boardSize.length > (nRows * nCols) - NumberOfElementsToRemove) {
-            System.out.println("#####################################");
-            arrayUtil.print(boardSize);
-            System.out.println("BoardSize: " + boardSize.length);
             int indexToRemove = getRandomIndex(boardSize.length);
-            System.out.println("Index To Remove: " + indexToRemove);
-            System.out.println("Index to removed: " + boardSize[indexToRemove]);
             int indexRow = boardSize[indexToRemove] / nRows;
-            System.out.println("Row Index to remove:" + indexRow);
             int indexCol = boardSize[indexToRemove] % nCols;
-            System.out.println("Col Index to remove:" + indexCol);
             board[indexRow][indexCol] = 0;
             boardSize = arrayUtil.remove(boardSize, indexToRemove);
         }
