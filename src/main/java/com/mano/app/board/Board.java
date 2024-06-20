@@ -25,7 +25,7 @@ public class Board {
         cleanBoard();
         solve(0, 0);
         removeElements(0.70);
-        printBoard();
+        // printBoard();
     }
 
     private void cleanBoard() {
@@ -68,7 +68,7 @@ public class Board {
         System.out.println("");
     }
 
-    private boolean solve(int roW, int coL) {
+    public boolean solve(int roW, int coL) {
 
         if (roW == nRows) {
             return true;

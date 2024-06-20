@@ -1,9 +1,12 @@
 package com.mano.app.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
@@ -19,7 +22,7 @@ public class GameUI {
 
     public GameUI() {
 
-        Board gameBoard = new Board();
+        final Board gameBoard = new Board();
         board = gameBoard.board;
 
         // System.out.println(board);
@@ -32,12 +35,23 @@ public class GameUI {
         JPanel titlePanel = new JPanel();
 
         JLabel title = new JLabel("Sudoku");
-        title.setFont(new Font("JetBrainsMono NF", Font.BOLD, 20));
+        title.setFont(new Font("JetBrainsMono NF", Font.BOLD, 70));
         JPanel gamePanel = createGamePanel();
+
+        JButton solveBtn = new JButton("Solve");
+        solveBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("solve");
+                // BUG: NOT WORKING
+                // gameBoard.solve(0, 0);
+            }
+        });
 
         titlePanel.add(title);
         mainFrame.add(titlePanel, BorderLayout.NORTH);
         mainFrame.add(gamePanel, BorderLayout.CENTER);
+        mainFrame.add(solveBtn, BorderLayout.SOUTH);
     }
 
     private JPanel createGamePanel() {
@@ -45,14 +59,17 @@ public class GameUI {
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 0;
+        Dimension fieldSize = new Dimension(50, 50);
         for (int row = 0; row < gridDim; row++) {
             for (int col = 0; col < gridDim; col++) {
-                JLabel elem;
-                if (board[row][col] == 0) {
-                    elem = new JLabel(" ");
-                } else {
-                    elem = new JLabel(board[row][col].toString());
+                JTextField elem = new JTextField();
+                if (board[row][col] != 0) {
+                    elem.setText(board[row][col].toString());
+                    elem.setEditable(false);
                 }
+                elem.setFont(new Font("JetBrainsMono NF", Font.BOLD, 35));
+                elem.setHorizontalAlignment(JTextField.CENTER);
+                elem.setPreferredSize(fieldSize);
                 gamePanel.add(elem, c);
                 c.gridx++;
             }
@@ -61,4 +78,9 @@ public class GameUI {
         }
         return gamePanel;
     }
+
+    // private void SolveBoard() {
+    //
+    //
+    // }
 }
