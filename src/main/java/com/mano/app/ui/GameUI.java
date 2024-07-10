@@ -1,10 +1,13 @@
 package com.mano.app.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,13 +22,15 @@ public class GameUI {
     public JFrame mainFrame;
     private int gridDim = 9; // NOTE: Change in the future
     private Integer[][] board;
+    private JTextField[][] textFields;
+    final Board gameBoard;
 
     public GameUI() {
 
-        final Board gameBoard = new Board();
+        gameBoard = new Board();
         board = gameBoard.board;
+        textFields = new JTextField[gridDim][gridDim];
 
-        // System.out.println(board);
         mainFrame = new JFrame();
         mainFrame.setVisible(true);
         mainFrame.setSize(400, 400);
@@ -45,13 +50,32 @@ public class GameUI {
                 System.out.println("solve");
                 // BUG: NOT WORKING
                 // gameBoard.solve(0, 0);
+
+                SolveBoard();
+            }
+
+        });
+
+        JButton quitBtn = new JButton("Quit");
+        quitBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainFrame.dispose();
             }
         });
+
+        // NOTE: Not Sure of the Layout to go for....
+        // JPanel buttonPanel = new JPanel(new BorderLayout());
+        // buttonPanel.add(quitBtn, BorderLayout.EAST);
+        // buttonPanel.add(solveBtn, BorderLayout.WEST);
+        JPanel buttonPanel = new JPanel(new GridLayout());
+        buttonPanel.add(solveBtn);
+        buttonPanel.add(quitBtn);
 
         titlePanel.add(title);
         mainFrame.add(titlePanel, BorderLayout.NORTH);
         mainFrame.add(gamePanel, BorderLayout.CENTER);
-        mainFrame.add(solveBtn, BorderLayout.SOUTH);
+        mainFrame.add(buttonPanel, BorderLayout.SOUTH);
     }
 
     private JPanel createGamePanel() {
@@ -63,7 +87,8 @@ public class GameUI {
         for (int row = 0; row < gridDim; row++) {
             for (int col = 0; col < gridDim; col++) {
                 JTextField elem = new JTextField();
-                if (board[row][col] != 0) {
+                textFields[row][col] = elem;
+                if (board[row][col] != null && board[row][col] != 0) {
                     elem.setText(board[row][col].toString());
                     elem.setEditable(false);
                 }
@@ -72,6 +97,17 @@ public class GameUI {
                 elem.setPreferredSize(fieldSize);
                 gamePanel.add(elem, c);
                 c.gridx++;
+
+                int top = (row % 3 == 0) ? 4 : 1;
+                int left = (col % 3 == 0) ? 4 : 1;
+                int bottom = (row == gridDim - 1) ? 4 : 1;
+                int right = (col == gridDim - 1) ? 4 : 1;
+                elem.setBorder(BorderFactory.createMatteBorder(
+                        top,
+                        left,
+                        bottom,
+                        right,
+                        Color.BLACK));
             }
             c.gridx = 0;
             c.gridy++;
@@ -79,8 +115,16 @@ public class GameUI {
         return gamePanel;
     }
 
-    // private void SolveBoard() {
-    //
-    //
-    // }
+    private void SolveBoard() {
+        for (int row = 0; row < gridDim; row++) {
+            for (int col = 0; col < gridDim; col++) {
+                System.out.print(textFields[row][col].getText());
+                System.out.print(" ");
+            }
+            System.out.println("");
+        }
+        // BUG: This changes the board
+        gameBoard.solve(0, 0);
+        gameBoard.printBoard();
+    }
 }
