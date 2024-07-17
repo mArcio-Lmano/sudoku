@@ -125,6 +125,10 @@ public class GameUI {
         }
         // BUG: This changes the board
         gameBoard.solve(0, 0);
-        gameBoard.printBoard();
+        for (int row = 0; row < gridDim; row++) {
+            for (int col = 0; col < gridDim; col++) {
+                textFields[row][col].setText(gameBoard.board[row][col].toString());
+            }
+        }
     }
 }
